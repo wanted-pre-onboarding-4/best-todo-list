@@ -1,54 +1,25 @@
 import { useEffect, useState } from 'react';
-import { todos } from '../../utils/ApiRoutes';
-import axios from 'axios';
 import TodoWrite from '../../components/todo/TodoWrite';
 import TodoItem from '../../components/todo/TodoItem';
 import * as S from '../../components/todo/Todo.styles';
+import { createTodo, getTodos } from '../../services/todo';
 
 export default function TodoPage() {
   const [data, setData] = useState([]);
   const [input, setInput] = useState('');
-  const access_token = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    getTodos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const getTodoList = async () => {
+      const { data } = await getTodos();
+      setData(data);
+    };
+    getTodoList();
   }, []);
 
-  const getTodos = async () => {
-    await axios
-      .get(`${todos}`, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      })
-      .then(res => {
-        setData(res.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
   const onClickAdd = async () => {
-    await axios
-      .post(
-        `${todos}`,
-        { todo: input },
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      )
-      .then(res => {
-        setData(res.data);
-        getTodos();
-        setInput('');
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    const { data: createdData } = await createTodo(input);
+    setData(prev => [...prev, createdData]);
+    setInput('');
   };
 
   return (
@@ -77,9 +48,9 @@ export default function TodoPage() {
           </div>
         </S.CheckInfo>
         {data.length > 0 &&
-          data.map(el => (
-            <div key={el.id}>
-              <TodoItem el={el} getTodos={getTodos} />
+          data.map(todoItem => (
+            <div key={todoItem.id}>
+              <TodoItem setData={setData} todoItem={todoItem} getTodos={getTodos} />
             </div>
           ))}
       </section>

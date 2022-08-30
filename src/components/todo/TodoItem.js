@@ -1,83 +1,50 @@
 import Button02 from '../commons/buttons/Button02';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { todos } from '../../utils/ApiRoutes';
 import TodoWrite from './TodoWrite';
 import * as S from './Todo.styles';
+import { deleteTodo, updateTodo } from '../../services/todo';
 
-export default function TodoItem(props) {
-  const access_token = localStorage.getItem('accessToken');
+export default function TodoItem({ setData, todoItem: { userId, todo, id, isCompleted } }) {
   const [isEdit, setIsEdit] = useState(false);
-  const [input, setInput] = useState(props.el.todo);
-  const [isCompleted, setIsCompleted] = useState(props.el.isCompleted);
+  const [input, setInput] = useState(todo);
+  const [done, setIsDone] = useState(isCompleted);
 
   const toggleEdit = () => {
     setIsEdit(prev => !prev);
   };
   const onClickDelete = async () => {
-    await axios
-      .delete(`${todos}/${props.el.id}`, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      })
-      .then(res => {
-        if (res.status === 204) {
-          props.getTodos();
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    await deleteTodo(id);
+    setData(prev => prev.filter(item => item.id !== id));
   };
 
   const onClickUpdate = async () => {
-    await axios
-      .put(
-        `${todos}/${props.el.id}`,
-        { todo: input, isCompleted: isCompleted },
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      )
-      .then(res => {
-        if (res.status === 200) {
-          setIsEdit(false);
-          props.getTodos();
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    const newTodo = { id, todo: input, isCompleted: done, userId };
+    const { data: updatedTodo } = await updateTodo(id, newTodo);
+    setData(prev => prev.map(item => (item.id === updatedTodo.id ? newTodo : item)));
   };
 
   useEffect(() => {
     onClickUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCompleted]);
+  }, [done]);
 
   return (
     <S.Form>
       {isEdit ? (
         <TodoWrite
           type="text"
-          defaultValue={props.el.todo}
+          defaultValue={todo}
           onChange={event => setInput(event.target.value)}
           onClickUpdate={onClickUpdate}
           isEdit={isEdit}
           toggleEdit={toggleEdit}
-          isCompleted={isCompleted}
-          onClickCheck={() => setIsCompleted(prev => !prev)}
+          isCompleted={done}
+          onClickCheck={() => setIsDone(prev => !prev)}
         />
       ) : (
         <S.Item>
-          <span
-            onClick={() => setIsCompleted(prev => !prev)}
-            className={isCompleted ? 'isCompleted' : ''}
-          />
-          <div className="content">{props.el.todo}</div>
+          <span onClick={() => setIsDone(prev => !prev)} className={done ? 'isCompleted' : ''} />
+          <div className="content">{todo}</div>
           <Button02 name="수정" onClick={toggleEdit} />
           <Button02 name="삭제" onClick={onClickDelete} />
         </S.Item>
