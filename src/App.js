@@ -3,17 +3,16 @@ import GlobalStyle from './styles/Globalstyles';
 import AuthPage from './pages/Auth';
 import TodoPage from './pages/Todo';
 import PrivateRoutes from './utils/PrivateRoutes';
-// import PublicRoutes from './utils/routes/PublicRoutes';
-// import PrivateRoutes from './utils/routes/PrivateRoutes';
+import PublicRoutes from './utils/PublicRoutes';
 
 function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        {/* <Route element={<PublicRoutes />}> */}
-        <Route index element={<AuthPage />} />
-        {/* </Route> */}
+        <Route element={<PublicRoutes />}>
+          <Route index element={<AuthPage />} />
+        </Route>
         <Route element={<PrivateRoutes />}>
           <Route path="todo" element={<TodoPage />} />
         </Route>

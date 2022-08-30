@@ -1,16 +1,18 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Input01 from '../../components/commons/inputs/Input01';
 import Button01 from '../../components/commons/buttons/Button01';
 import { UserValidation } from '../../utils/UserValidation';
 import axios from 'axios';
-import { join, login } from '../../utils/ApiRoutes';
+import { join } from '../../utils/ApiRoutes';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../store/auth_context';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({ email: '', password: '' });
   const [NewInputs, setNewInputs] = useState({ NewEmail: '', NewPassword: '' });
+  const { onLoginAndJoin } = useContext(AuthContext);
 
   const onChangeInput = event => {
     setInputs({
@@ -39,24 +41,24 @@ export default function LoginPage() {
       });
   };
 
-  const onClickLogin = async () => {
-    await axios
-      .post(`${login}`, {
-        email: inputs.email,
-        password: inputs.password,
-      })
-      .then(res => {
-        const accessToken = res.data.access_token;
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-        }
-        alert('로그인에 성공했습니다');
-        navigate('/todo');
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  // const onClickLogin = async () => {
+  //   await axios
+  //     .post(`${login}`, {
+  //       email: inputs.email,
+  //       password: inputs.password,
+  //     })
+  //     .then(res => {
+  //       const accessToken = res.data.access_token;
+  //       if (accessToken) {
+  //         localStorage.setItem('accessToken', accessToken);
+  //       }
+  //       alert('로그인에 성공했습니다');
+  //       navigate('/todo');
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // };
 
   useEffect(() => {
     if (localStorage.getItem('accessToken')) {
@@ -85,7 +87,7 @@ export default function LoginPage() {
             value={inputs.password}
           />
           <Button01
-            onClick={onClickLogin}
+            onClick={() => onLoginAndJoin('login', inputs.email, inputs.password)}
             name="로그인"
             disabled={UserValidation(inputs.email, inputs.password)}
           />
