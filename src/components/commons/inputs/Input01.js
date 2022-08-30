@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Color } from '../../../styles/Colors';
 
 const Input = styled.input`
-  width: 100%;
+  width: 320px;
   padding: 10px 15px;
   border-bottom: 2px solid ${Color.GREEN_MAIN};
   ::placeholder {

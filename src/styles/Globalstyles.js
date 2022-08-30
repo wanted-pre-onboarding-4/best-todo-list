@@ -106,6 +106,7 @@ const GlobalStyle = styled.createGlobalStyle`
   body {
     line-height: 1;
     box-sizing: border-box;
+    background-color: #f9fbfd;
   }
   ol,
   ul,
