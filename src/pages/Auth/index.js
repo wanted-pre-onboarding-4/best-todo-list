@@ -8,6 +8,7 @@ import { join } from '../../utils/ApiRoutes';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../store/auth_context';
 
+//auth;
 export default function LoginPage() {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({ email: '', password: '' });
