@@ -1,5 +1,5 @@
 import Button02 from '../commons/buttons/Button02';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import TodoWrite from './TodoWrite';
 import * as S from './Todo.styles';
 import { deleteTodo, updateTodo } from '../../services/todo';
@@ -12,22 +12,25 @@ export default function TodoItem({ setData, todoItem: { userId, todo, id, isComp
   const toggleEdit = () => {
     setIsEdit(prev => !prev);
   };
+
   const onClickDelete = async () => {
     await deleteTodo(id);
     setData(prev => prev.filter(item => item.id !== id));
   };
 
+  const onClickCompleted = async () => {
+    const newTodo = { userId, id, isCompleted: !isCompleted, todo };
+    const { data: updatedTodo } = await updateTodo(id, newTodo);
+    setIsDone(prev => !prev);
+    setData(prev => prev.map(item => (item.id === updatedTodo.id ? newTodo : item)));
+  };
+
   const onClickUpdate = async () => {
-    const newTodo = { id, todo: input, isCompleted: done, userId };
+    const newTodo = { userId, id, isCompleted, todo: input };
     const { data: updatedTodo } = await updateTodo(id, newTodo);
     setData(prev => prev.map(item => (item.id === updatedTodo.id ? newTodo : item)));
     toggleEdit();
   };
-
-  useEffect(() => {
-    onClickUpdate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [done]);
 
   return (
     <S.Form>
@@ -44,7 +47,7 @@ export default function TodoItem({ setData, todoItem: { userId, todo, id, isComp
         />
       ) : (
         <S.Item>
-          <span onClick={() => setIsDone(prev => !prev)} className={done ? 'isCompleted' : ''} />
+          <span onClick={onClickCompleted} className={done ? 'isCompleted' : ''} />
           <div className="content">{todo}</div>
           <Button02 name="수정" onClick={toggleEdit} />
           <Button02 name="삭제" onClick={onClickDelete} />

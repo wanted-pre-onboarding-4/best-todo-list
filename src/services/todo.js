@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
-// todo 추가
 export const createTodo = async data => {
   const accessToken = localStorage.getItem('accessToken');
   try {
@@ -37,7 +36,6 @@ export const getTodos = async () => {
   }
 };
 
-// 수정
 export const updateTodo = async (id, data) => {
   const accessToken = localStorage.getItem('accessToken');
   try {
