@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://n38lcff1wk.execute-api.ap-northeast-2.amazonaws.com';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const login = async (email, password) => {
   try {

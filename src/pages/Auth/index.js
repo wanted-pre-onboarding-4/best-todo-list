@@ -3,9 +3,8 @@ import { useState, useEffect } from 'react';
 import Input01 from '../../components/commons/inputs/Input01';
 import Button01 from '../../components/commons/buttons/Button01';
 import { UserValidation } from '../../utils/UserValidation';
-import axios from 'axios';
-import { join, login } from '../../utils/ApiRoutes';
 import { useNavigate } from 'react-router-dom';
+import { join, login } from '../../services/auth';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -27,35 +26,33 @@ export default function LoginPage() {
   };
 
   const onClickJoin = async () => {
-    await axios
-      .post(`${join}`, {
-        email: NewInputs.NewEmail,
-        password: NewInputs.NewPassword,
-      })
-      .then(() => {
-        alert('회원가입에 성공했습니다');
-        setNewInputs({ NewEmail: '', NewPassword: '' });
-        navigate('/');
-      });
+    const response = await join(NewInputs.NewEmail, NewInputs.NewPassword);
+
+    if (response.status === 201) {
+      alert('회원가입에 성공했습니다');
+    } else {
+      alert(response.data.message);
+    }
+
+    setNewInputs({ NewEmail: '', NewPassword: '' });
   };
 
   const onClickLogin = async () => {
-    await axios
-      .post(`${login}`, {
-        email: inputs.email,
-        password: inputs.password,
-      })
-      .then(res => {
-        const accessToken = res.data.access_token;
-        if (accessToken) {
-          localStorage.setItem('accessToken', accessToken);
-        }
-        alert('로그인에 성공했습니다');
-        navigate('/todo');
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    const response = await login(inputs.email, inputs.password);
+
+    if (response.status === 200) {
+      const {
+        data: { access_token },
+      } = response;
+
+      localStorage.setItem('accessToken', access_token);
+      alert('로그인에 성공했습니다');
+      navigate('/todo');
+    } else {
+      alert(response.data.message);
+    }
+
+    setInputs({ email: '', password: '' });
   };
 
   useEffect(() => {
