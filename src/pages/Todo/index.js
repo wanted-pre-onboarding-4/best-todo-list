@@ -25,8 +25,6 @@ export default function TodoPage() {
   return (
     <S.Main>
       <section className="todo">
-        <h1>투두 리스트</h1>
-
         <TodoWrite
           placeholder="할 일을 추가하세요"
           type="text"

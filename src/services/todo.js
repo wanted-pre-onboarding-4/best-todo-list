@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://n38lcff1wk.execute-api.ap-northeast-2.amazonaws.com';
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 // todo 추가
 export const createTodo = async data => {
-  const token = localStorage.getItem('token');
+  const accessToken = localStorage.getItem('accessToken');
   try {
     const res = await axios.post(
       `${BASE_URL}/todos`,
@@ -13,7 +13,7 @@ export const createTodo = async data => {
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -24,11 +24,11 @@ export const createTodo = async data => {
 };
 
 export const getTodos = async () => {
-  const token = localStorage.getItem('token');
+  const accessToken = localStorage.getItem('accessToken');
   try {
     const res = await axios.get(`${BASE_URL}/todos`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     return res;
@@ -39,7 +39,7 @@ export const getTodos = async () => {
 
 // 수정
 export const updateTodo = async (id, data) => {
-  const token = localStorage.getItem('token');
+  const accessToken = localStorage.getItem('accessToken');
   try {
     const res = await axios.put(
       `${BASE_URL}/todos/${id}`,
@@ -49,7 +49,7 @@ export const updateTodo = async (id, data) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -60,11 +60,11 @@ export const updateTodo = async (id, data) => {
 };
 
 export const deleteTodo = async id => {
-  const token = localStorage.getItem('token');
+  const accessToken = localStorage.getItem('accessToken');
   try {
     const res = await axios.delete(`${BASE_URL}/todos/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     return res;
