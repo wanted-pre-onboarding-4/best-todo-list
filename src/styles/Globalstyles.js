@@ -108,7 +108,8 @@ const GlobalStyle = styled.createGlobalStyle`
     box-sizing: border-box;
   }
   ol,
-  ul {
+  ul,
+  li {
     list-style: none;
   }
   blockquote,
@@ -125,6 +126,31 @@ const GlobalStyle = styled.createGlobalStyle`
   table {
     border-collapse: collapse;
     border-spacing: 0;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  textarea {
+    resize: none;
+    outline: none;
+  }
+  input,
+  select,
+  button {
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    background: none;
+  }
+  button {
+    background: none;
+    cursor: pointer;
   }
 `;
 
