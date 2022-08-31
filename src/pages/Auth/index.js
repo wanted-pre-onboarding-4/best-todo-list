@@ -4,7 +4,7 @@ import Input01 from '../../components/commons/inputs/Input01';
 import Button01 from '../../components/commons/buttons/Button01';
 import { UserValidation } from '../../utils/UserValidation';
 
-import { join, login } from '../../utils/ApiRoutes';
+import { join, login } from '../../services/auth';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
