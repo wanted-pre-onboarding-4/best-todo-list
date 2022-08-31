@@ -9,9 +9,19 @@ import { join, login } from '../../services/auth';
 export default function LoginPage() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
+  const [isRegister, setIsRegister] = useState(false);
   const [inputs, setInputs] = useState({ email: '', password: '' });
   const [NewInputs, setNewInputs] = useState({ NewEmail: '', NewPassword: '' });
 
+  const handleLoginMode = () => {
+    setIsLogin(true);
+    setIsRegister(false);
+  };
+
+  const handleRegisterMode = () => {
+    setIsLogin(false);
+    setIsRegister(true);
+  };
   const onChangeInput = event => {
     setInputs({
       ...inputs,
@@ -27,8 +37,6 @@ export default function LoginPage() {
   };
 
   const onClickJoin = async () => {
-    console.log('Register');
-    setIsLogin(false);
     const response = await join(NewInputs.NewEmail, NewInputs.NewPassword);
 
     if (response.status === 201) {
@@ -41,8 +49,6 @@ export default function LoginPage() {
   };
 
   const onClickLogin = async () => {
-    console.log('Login');
-    setIsLogin(true);
     const response = await login(inputs.email, inputs.password);
 
     if (response.status === 200) {
@@ -69,7 +75,7 @@ export default function LoginPage() {
 
   return (
     <Main>
-      {isLogin ? (
+      {isLogin && (
         <section className="login">
           <Title>기존회원 로그인</Title>
           <Form>
@@ -89,7 +95,8 @@ export default function LoginPage() {
             />
           </Form>
         </section>
-      ) : (
+      )}
+      {isRegister && (
         <section className="login">
           <Title>신규회원 가입</Title>
           <Form>
@@ -110,18 +117,25 @@ export default function LoginPage() {
           </Form>
         </section>
       )}
-      <ButtonContainer>
-        <Button01
-          onClick={onClickLogin}
-          name="로그인"
-          disabled={UserValidation(inputs.email, inputs.password)}
-        />
-        <Button01
-          onClick={onClickJoin}
-          name="회원가입"
-          disabled={UserValidation(NewInputs.NewEmail, NewInputs.NewPassword)}
-        />
-      </ButtonContainer>
+      {isLogin ? (
+        <ButtonContainer>
+          <Button01
+            onClick={onClickLogin}
+            name="로그인"
+            disabled={UserValidation(inputs.email, inputs.password)}
+          />
+          <Button01 onClick={handleRegisterMode} name="회원가입" />
+        </ButtonContainer>
+      ) : (
+        <ButtonContainer>
+          <Button01 onClick={handleLoginMode} name="로그인" />
+          <Button01
+            onClick={onClickJoin}
+            name="회원가입"
+            disabled={UserValidation(NewInputs.NewEmail, NewInputs.NewPassword)}
+          />
+        </ButtonContainer>
+      )}
     </Main>
   );
 }
