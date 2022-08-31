@@ -1,4 +1,11 @@
-# Team 4
+# Assginment #1
+
+## Overview
+
+- [사전 과제](https://github.com/walking-sunset/selection-task)로 구현한 Todo 애플리케이션의 ***Best Practice*** 를 찾아 최적화된 결과물 도출하기
+- 기간 : 2022/08/30 ~ 2022/09/01
+
+
 
 ## Find Best Practice
 
@@ -31,6 +38,8 @@
 
 - 공통된 스타일링들을 컴포넌트 레벨이 아닌 애플리케이션 레벨에서 적용하여 일괄적으로 스타일 관리를 했습니다.
 
+
+
 ## Features
 
 #### 1. Sign Up
@@ -51,11 +60,15 @@
 
 - 토큰 존재 여부에 따라 그에 맞는 페이지로 이동합니다.
 
+
+
 ## Dependency
 
 - [x] react
 - [x] axios
 - [x] styled-components
+
+
 
 ## Getting Started
 
