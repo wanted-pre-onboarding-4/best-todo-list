@@ -1,5 +1,5 @@
 import Button02 from '../commons/buttons/Button02';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import TodoWrite from './TodoWrite';
 import * as S from './Todo.styles';
 import { deleteTodo, updateTodo } from '../../services/todo';
@@ -21,6 +21,7 @@ export default function TodoItem({ setData, todoItem: { userId, todo, id, isComp
     const newTodo = { id, todo: input, isCompleted: done, userId };
     const { data: updatedTodo } = await updateTodo(id, newTodo);
     setData(prev => prev.map(item => (item.id === updatedTodo.id ? newTodo : item)));
+    toggleEdit();
   };
 
   useEffect(() => {

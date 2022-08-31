@@ -10,8 +10,8 @@ export default function LoginPage() {
   const { onLoginAndJoin } = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
-  const [inputs, setInputs] = useState({ email: '', password: '' });
-  const [NewInputs, setNewInputs] = useState({ NewEmail: '', NewPassword: '' });
+  const [loginInputs, setLoginInputs] = useState({ email: '', password: '' });
+  const [registerInputs, setRegisterInputs] = useState({ email: '', password: '' });
 
   const handleLoginMode = () => {
     setIsLogin(true);
@@ -23,71 +23,71 @@ export default function LoginPage() {
     setIsRegister(true);
   };
   const onChangeInput = event => {
-    setInputs({
-      ...inputs,
+    setLoginInputs({
+      ...loginInputs,
       [event.target.id]: event.target.value,
     });
   };
 
   const onChangeNewInput = event => {
-    setNewInputs({
-      ...NewInputs,
+    setRegisterInputs({
+      ...registerInputs,
       [event.target.id]: event.target.value,
     });
   };
 
   const onClickJoin = async () => {
-    onLoginAndJoin('join', NewInputs.NewEmail, NewInputs.NewPassword);
+    onLoginAndJoin('join', registerInputs.email, registerInputs.password);
 
-    setNewInputs({ NewEmail: '', NewPassword: '' });
+    setRegisterInputs({ email: '', password: '' });
   };
 
   const onClickLogin = async () => {
-    onLoginAndJoin('login', inputs.email, inputs.password);
+    onLoginAndJoin('login', loginInputs.email, loginInputs.password);
 
-    setInputs({ email: '', password: '' });
+    setLoginInputs({ email: '', password: '' });
   };
 
   return (
     <Main>
       {isLogin && (
         <section className="login">
-          <Title>기존회원 로그인</Title>
+          <Title>로그인</Title>
           <Form>
             <Input01
               placeholder="@를 포함한 email"
               id="email"
               type="text"
               onChange={onChangeInput}
-              value={inputs.email}
+              value={loginInputs.email}
             />
             <Input01
               placeholder="8자 이상의 password"
               id="password"
               type="password"
               onChange={onChangeInput}
-              value={inputs.password}
+              value={loginInputs.password}
             />
           </Form>
         </section>
       )}
       {isRegister && (
         <section className="login">
-          <Title>신규회원 가입</Title>
+          <Title>회원가입</Title>
           <Form>
             <Input01
               placeholder="@를 포함한 email"
               type="text"
               id="NewEmail"
               onChange={onChangeNewInput}
-              value={NewInputs.NewEmail || ''}
+              value={registerInputs.email || ''}
             />
             <Input01
               placeholder="8자 이상의 password"
               type="password"
               id="NewPassword"
               onChange={onChangeNewInput}
-              value={NewInputs.NewPassword || ''}
+              value={registerInputs.password || ''}
             />
           </Form>
         </section>
@@ -97,7 +97,7 @@ export default function LoginPage() {
           <Button01
             onClick={onClickLogin}
             name="로그인"
-            disabled={UserValidation(inputs.email, inputs.password)}
+            disabled={UserValidation(loginInputs.email, loginInputs.password)}
           />
           <Button01 onClick={handleRegisterMode} name="회원가입" />
         </ButtonContainer>
@@ -107,7 +107,7 @@ export default function LoginPage() {
           <Button01
             onClick={onClickJoin}
             name="회원가입"
-            disabled={UserValidation(NewInputs.NewEmail, NewInputs.NewPassword)}
+            disabled={UserValidation(registerInputs.email, registerInputs.password)}
           />
         </ButtonContainer>
       )}

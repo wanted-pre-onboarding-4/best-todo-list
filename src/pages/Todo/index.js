@@ -17,7 +17,10 @@ export default function TodoPage() {
   }, []);
 
   const onClickAdd = async () => {
+    if (input === '') return;
+
     const { data: createdData } = await createTodo(input);
+
     setData(prev => [...prev, createdData]);
     setInput('');
   };
