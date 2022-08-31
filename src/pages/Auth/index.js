@@ -8,6 +8,7 @@ import { join, login } from '../../services/auth';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(true);
   const [inputs, setInputs] = useState({ email: '', password: '' });
   const [NewInputs, setNewInputs] = useState({ NewEmail: '', NewPassword: '' });
 
@@ -26,6 +27,8 @@ export default function LoginPage() {
   };
 
   const onClickJoin = async () => {
+    console.log('Register');
+    setIsLogin(false);
     const response = await join(NewInputs.NewEmail, NewInputs.NewPassword);
 
     if (response.status === 201) {
@@ -38,6 +41,8 @@ export default function LoginPage() {
   };
 
   const onClickLogin = async () => {
+    console.log('Login');
+    setIsLogin(true);
     const response = await login(inputs.email, inputs.password);
 
     if (response.status === 200) {
@@ -64,73 +69,79 @@ export default function LoginPage() {
 
   return (
     <Main>
-      <section className="login">
-        <h1>기존회원 로그인</h1>
-        <Form>
-          <Input01
-            placeholder="@를 포함한 email"
-            id="email"
-            type="text"
-            onChange={onChangeInput}
-            value={inputs.email}
-          />
-          <Input01
-            placeholder="8자 이상의 password"
-            id="password"
-            type="password"
-            onChange={onChangeInput}
-            value={inputs.password}
-          />
-          <Button01
-            onClick={onClickLogin}
-            name="로그인"
-            disabled={UserValidation(inputs.email, inputs.password)}
-          />
-        </Form>
-      </section>
-      <section className="login">
-        <h1>신규회원 가입</h1>
-        <Form>
-          <Input01
-            placeholder="@를 포함한 email"
-            type="text"
-            id="NewEmail"
-            onChange={onChangeNewInput}
-            value={NewInputs.NewEmail || ''}
-          />
-          <Input01
-            placeholder="8자 이상의 password"
-            type="password"
-            id="NewPassword"
-            onChange={onChangeNewInput}
-            value={NewInputs.NewPassword || ''}
-          />
-          <Button01
-            onClick={onClickJoin}
-            name="회원가입"
-            disabled={UserValidation(NewInputs.NewEmail, NewInputs.NewPassword)}
-          />
-        </Form>
-      </section>
+      {isLogin ? (
+        <section className="login">
+          <Title>기존회원 로그인</Title>
+          <Form>
+            <Input01
+              placeholder="@를 포함한 email"
+              id="email"
+              type="text"
+              onChange={onChangeInput}
+              value={inputs.email}
+            />
+            <Input01
+              placeholder="8자 이상의 password"
+              id="password"
+              type="password"
+              onChange={onChangeInput}
+              value={inputs.password}
+            />
+          </Form>
+        </section>
+      ) : (
+        <section className="login">
+          <Title>신규회원 가입</Title>
+          <Form>
+            <Input01
+              placeholder="@를 포함한 email"
+              type="text"
+              id="NewEmail"
+              onChange={onChangeNewInput}
+              value={NewInputs.NewEmail || ''}
+            />
+            <Input01
+              placeholder="8자 이상의 password"
+              type="password"
+              id="NewPassword"
+              onChange={onChangeNewInput}
+              value={NewInputs.NewPassword || ''}
+            />
+          </Form>
+        </section>
+      )}
+      <ButtonContainer>
+        <Button01
+          onClick={onClickLogin}
+          name="로그인"
+          disabled={UserValidation(inputs.email, inputs.password)}
+        />
+        <Button01
+          onClick={onClickJoin}
+          name="회원가입"
+          disabled={UserValidation(NewInputs.NewEmail, NewInputs.NewPassword)}
+        />
+      </ButtonContainer>
     </Main>
   );
 }
 
 const Main = styled.div`
-  width: 100%;
-  max-width: 1240px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  section {
-    width: 400px;
-    padding: 80px 0px;
-    h1 {
-      margin-bottom: 30px;
-    }
-  }
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  padding: 30px;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
 `;
 
 const Form = styled.div`
@@ -139,4 +150,12 @@ const Form = styled.div`
   input {
     margin-bottom: 15px;
   }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 320px;
+  margin-top: 20px;
 `;
