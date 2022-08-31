@@ -1,15 +1,12 @@
 import styled from 'styled-components';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import Input01 from '../../components/commons/inputs/Input01';
 import Button01 from '../../components/commons/buttons/Button01';
 import { UserValidation } from '../../utils/UserValidation';
 
-import { join, login } from '../../services/auth';
-import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../store/auth_context';
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const { onLoginAndJoin } = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
