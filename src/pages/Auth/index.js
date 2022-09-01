@@ -33,10 +33,6 @@ export default function LoginPage() {
       ...registerInputs,
       [event.target.id]: event.target.value,
     });
-    console.log({
-      ...registerInputs,
-      [event.target.id]: event.target.value,
-    });
   };
 
   const onClickJoin = async () => {
