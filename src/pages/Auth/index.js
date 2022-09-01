@@ -3,7 +3,6 @@ import { useState, useContext } from 'react';
 import Input01 from '../../components/commons/inputs/Input01';
 import Button01 from '../../components/commons/buttons/Button01';
 import { UserValidation } from '../../utils/UserValidation';
-
 import AuthContext from '../../store/auth_context';
 
 export default function LoginPage() {
@@ -11,7 +10,7 @@ export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
   const [loginInputs, setLoginInputs] = useState({ email: '', password: '' });
-  const [registerInputs, setRegisterInputs] = useState({ email: '', password: '' });
+  const [registerInputs, setRegisterInputs] = useState({ newEmail: '', newPassword: '' });
 
   const handleLoginMode = () => {
     setIsLogin(true);
@@ -34,17 +33,19 @@ export default function LoginPage() {
       ...registerInputs,
       [event.target.id]: event.target.value,
     });
+    console.log({
+      ...registerInputs,
+      [event.target.id]: event.target.value,
+    });
   };
 
   const onClickJoin = async () => {
-    onLoginAndJoin('join', registerInputs.email, registerInputs.password);
-
-    setRegisterInputs({ email: '', password: '' });
+    onLoginAndJoin('join', registerInputs.newEmail, registerInputs.newPassword);
+    setRegisterInputs({ newEmail: '', newPassword: '' });
   };
 
   const onClickLogin = async () => {
     onLoginAndJoin('login', loginInputs.email, loginInputs.password);
-
     setLoginInputs({ email: '', password: '' });
   };
 
@@ -78,16 +79,16 @@ export default function LoginPage() {
             <Input01
               placeholder="@를 포함한 email"
               type="text"
-              id="NewEmail"
+              id="newEmail"
               onChange={onChangeNewInput}
-              value={registerInputs.email || ''}
+              value={registerInputs.newEmail || ''}
             />
             <Input01
               placeholder="8자 이상의 password"
               type="password"
-              id="NewPassword"
+              id="newPassword"
               onChange={onChangeNewInput}
-              value={registerInputs.password || ''}
+              value={registerInputs.newPassword || ''}
             />
           </Form>
         </section>
@@ -107,7 +108,7 @@ export default function LoginPage() {
           <Button01
             onClick={onClickJoin}
             name="회원가입"
-            disabled={UserValidation(registerInputs.email, registerInputs.password)}
+            disabled={UserValidation(registerInputs.newEmail, registerInputs.newPassword)}
           />
         </ButtonContainer>
       )}
